@@ -1,0 +1,70 @@
+
+
+
+/* -------------------------
+   page de connexion
+------------------------- */
+
+/* -------------------------
+   Navbar
+------------------------- */
+.custom-navbar {
+    background-color: #1e1e2f; /* Couleur modifiable */
+}
+
+/* Liens de la navbar */
+.custom-navbar .nav-link {
+    color: #ffffff; /* Couleur du texte */
+}
+.custom-navbar .nav-link.active {
+    color: #ffd700; /* Couleur du lien actif */
+}
+
+/* -------------------------
+   Footer
+------------------------- */
+.custom-footer {
+    background-color: #1e1e2f; /* Couleur modifiable */
+    color: #ffffff; /* Couleur texte */
+}
+
+/* -------------------------
+   Card formulaire
+------------------------- */
+.card-form {
+    max-width: 400px;
+    width: 100%;
+    background-color: #ffffff; /* Couleur modifiable */
+}
+
+/* Bouton personnalisé */
+.btn-custom {
+    background-color: #0d6efd; /* Couleur modifiable */
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #0b5ed7; /* Couleur hover modifiable */
+}
+
+/* Lien retour */
+.link-custom {
+    color: #0d6efd; /* Couleur modifiable */
+}
+.link-custom:hover {
+    color: #0b5ed7;
+}
+
+
+/* Bouton personnalisé */
+.btn-custom {
+    background-color: #0d1014; /* Couleur normale du bouton */
+    color: #ffffff; /* Couleur du texte */
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #0d1014; /* Couleur du bouton au survol */
+    color: #ffffff; /* Couleur du texte au survol */
+}

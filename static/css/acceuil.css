@@ -1,0 +1,56 @@
+/* =============================
+   Couleurs personnalisables
+   ============================= */
+
+/* Navbar */
+.custom-navbar {
+    background-color: #0d1014;  /* CHANGE cette couleur à volonté */
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link {
+    color: white;  /* couleur du texte de la navbar */
+}
+
+.custom-navbar .nav-link:hover {
+    color: #ffd700; /* couleur au survol */
+}
+
+/* Header */
+.custom-header {
+    background: url('../image/bot_gpt.png') no-repeat center center;
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white; /* couleur du texte */
+    text-shadow: 0px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Bouton custom */
+.btn-custom {
+    background-color: #fc0000; /* couleur du bouton */
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Footer */
+.custom-footer {
+    background-color: #0d1014; /* CHANGE cette couleur à volonté */
+    color: white; /* couleur du texte */
+}
+
+/* Section info */
+section.bg-light {
+    background-color: #f9f9f9; /* couleur du fond */
+}
+
+
+
