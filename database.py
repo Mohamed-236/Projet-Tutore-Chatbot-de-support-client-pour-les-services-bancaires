@@ -238,91 +238,85 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
 
 
 
+#Ajout des fonction relative au dashboard
 
-
-
-'''
-def effectuer_transaction(id_compte_source, id_compte_dest, montant):
+def get_transactions_for_dashboard(limit=200):
     conn = get_connection()
     cur = conn.cursor()
-    try:
-        # Récupérer solde du compte source
-        cur.execute("SELECT solde_compte FROM compte WHERE id_compte=%s", (id_compte_source,))
-        result = cur.fetchone()
-        if not result:
-            # Compte source inexistant -> transaction refusée
-            cur.execute("""
-                INSERT INTO trans_client(id_compte, id_compte_dest, montant_transaction, type_transaction, statut_transaction)
-                VALUES (%s, %s, %s, 'envoi', 'refusée')
-                RETURNING id_transaction
-            """, (id_compte_source, id_compte_dest, montant))
-            id_trans = cur.fetchone()[0]
+    cur.execute("""
+        SELECT
+            t.id_transaction,
+            t.id_compte,
+            c_source.numero_compte AS numero_source,
+            u_source.nom_user AS source_nom,
+            u_source.prenom_user AS source_prenom,
+            t.id_compte_dest,
+            c_dest.numero_compte AS numero_dest,
+            t.montant_transaction,
+            t.type_transaction,
+            t.date_transaction,
+            t.statut_transaction,
+            t.est_suspecte
+        FROM trans_client t
+        JOIN compte c_source ON t.id_compte = c_source.id_compte
+        JOIN utilisateur u_source ON c_source.id_user = u_source.id_user
+        LEFT JOIN compte c_dest ON t.id_compte_dest = c_dest.id_compte
+        ORDER BY t.date_transaction DESC
+        LIMIT %s
+    """, (limit,))
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return rows
 
-            # Enregistrer suspicion
-            cur.execute("""
-                INSERT INTO suspicion(id_transaction, raison_suspicion, niveau_risque)
-                VALUES (%s, %s, %s)
-            """, (id_trans, "Compte source inexistant", "élevé"))
+def get_suspicions(limit=200):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT
+            s.id_suspicion,
+            s.id_transaction,
+            t.id_compte,
+            c_source.numero_compte AS numero_source,
+            u_source.nom_user AS source_nom,
+            u_source.prenom_user AS source_prenom,
+            t.id_compte_dest,
+            c_dest.numero_compte AS numero_dest,
+            t.montant_transaction,
+            t.date_transaction,
+            s.raison_suspicion,
+            s.niveau_risque,
+            s.statut_analyse,
+            s.commentaire,
+            s.id_analyste,
+            u_anal.nom_user AS analyste_nom,
+            u_anal.prenom_user AS analyste_prenom,
+            s.date_suspicion
+        FROM suspicion s
+        JOIN trans_client t ON s.id_transaction = t.id_transaction
+        JOIN compte c_source ON t.id_compte = c_source.id_compte
+        JOIN utilisateur u_source ON c_source.id_user = u_source.id_user
+        LEFT JOIN compte c_dest ON t.id_compte_dest = c_dest.id_compte
+        LEFT JOIN utilisateur u_anal ON s.id_analyste = u_anal.id_user
+        ORDER BY s.date_suspicion DESC
+        LIMIT %s
+    """, (limit,))
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return rows
 
-            conn.commit()
-            return False
-
-        solde_source = result[0]
-
-
-        
-
-
-
-        if solde_source < montant:
-            # Transaction refusée -> solde insuffisant
-            cur.execute("""
-                INSERT INTO trans_client(id_compte, id_compte_dest, montant_transaction, type_transaction, statut_transaction)
-                VALUES (%s, %s, %s, 'envoi', 'refusée')
-                RETURNING id_transaction
-            """, (id_compte_source, id_compte_dest, montant))
-            id_trans = cur.fetchone()[0]
-
-            # Enregistrer suspicion
-            cur.execute("""
-                INSERT INTO suspicion(id_transaction, raison_suspicion, niveau_risque)
-                VALUES (%s, %s, %s)
-            """, (id_trans, "Montant supérieur au solde", "élevé"))
-
-            conn.commit()
-            return False
-
-        # Débiter compte source
-        cur.execute("""
-            UPDATE compte
-            SET solde_compte = solde_compte - %s
-            WHERE id_compte = %s
-        """, (montant, id_compte_source))
-
-        # Créditer compte destinataire
-        cur.execute("""
-            UPDATE compte
-            SET solde_compte = solde_compte + %s
-            WHERE id_compte = %s
-        """, (montant, id_compte_dest))
-
-        # Enregistrer transaction réussie
-        cur.execute("""
-            INSERT INTO trans_client(id_compte, id_compte_dest, montant_transaction, type_transaction, statut_transaction)
-            VALUES (%s, %s, %s, 'envoi', 'réussie')
-        """, (id_compte_source, id_compte_dest, montant))
-
-        conn.commit()
-        return True
-
-    except Exception as e:
-        conn.rollback()
-        print("Erreur transaction :", e)
-        return False
-    finally:
-        conn.close()
-
-
-'''
-    
-
+def set_suspicion_decision(id_suspicion, id_analyste, statut, commentaire=None):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE suspicion
+        SET statut_analyse=%s, id_analyste=%s, commentaire=%s
+        WHERE id_suspicion=%s
+        RETURNING id_suspicion
+    """, (statut, id_analyste, commentaire, id_suspicion))
+    res = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    return bool(res)

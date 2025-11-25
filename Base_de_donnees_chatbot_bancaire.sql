@@ -319,3 +319,27 @@ VALUES
 
 SELECT * FROM compte
 
+
+
+
+
+--Modifiaction supplementaire
+
+-- 1) ajouter id_analyste (FK vers utilisateur)
+ALTER TABLE suspicion
+ADD COLUMN id_analyste INT NULL REFERENCES utilisateur(id_user);
+
+-- 2) remplacer le champ texte analyste_humain si présent
+-- (si tu as déjà analyste_humain, on le retire)
+ALTER TABLE suspicion
+DROP COLUMN IF EXISTS analyste_humain;
+
+-- 3) ajouter statut_analyse et commentaire
+ALTER TABLE suspicion
+ADD COLUMN statut_analyse VARCHAR(50) DEFAULT 'en_attente';
+
+ALTER TABLE suspicion
+ADD COLUMN commentaire TEXT;
+
+-- 4) index pour recherche rapide
+CREATE INDEX IF NOT EXISTS idx_suspicion_date ON suspicion(date_suspicion DESC);

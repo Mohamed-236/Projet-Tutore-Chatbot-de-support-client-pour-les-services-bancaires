@@ -1,13 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard Analyste</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/dashboard.css')}}">
+
+
 </head>
+
 <body>
-    <h1>  Bienvenu sur le dashboard cher analyste </h1>
-    <a href="{{url_for('acceuil')}}">Acceuil</a>
-    
+
+    <!-- Header avec nom du bot, nom du conseiller et bouton de déconnexion -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #161b22;">
+        <div class="container-fluid">
+            <!-- Nom du bot à gauche -->
+            <a class="navbar-brand fs-4" href="{{url_for('acceuil')}}">🤖Yakfis-Bot | Dashboard</a>
+
+            <!-- Nom du conseiller et bouton de déconnexion à droite -->
+            <div class="d-flex align-items-center ms-auto">
+                {% if session.nom_user and session.prenom_user %}
+                    <span class="user-name">👤 {{ session.prenom_user }} {{ session.nom_user }}</span>
+                {% endif %}
+                <a href="{{ url_for('deconnexion') }}" class="btn btn-outline-danger btn-sm">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid content py-4">
+        <h2 class="mb-4 text-center">📊 Dashboard de Surveillance</h2>
+
+        <!-- Résumé -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card text-bg-dark p-3">
+                    <div class="card-body">
+                        <h5>Total transactions</h5>
+                        <p class="fs-4">{{ transactions|length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card text-bg-success p-3">
+                    <div class="card-body">
+                        <h5>Suspectes</h5>
+                        <p class="fs-4">{{ suspicions|length }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="card mb-4">
+            <div class="card-header">Toutes les transactions</div>
+            <div class="card-body table-responsive">
+                <table class="table table-striped table-dark table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Source</th>
+                            <th>Compte source</th>
+                            <th>Destination</th>
+                            <th>Montant</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Suspecte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transactions %}
+                        <tr>
+                            <td>{{ t[0] }}</td>
+                            <td>{{ t[3] }} {{ t[4] }}</td>
+                            <td>{{ t[2] }}</td>
+                            <td>{{ t[6] or '—' }}</td>
+                            <td>{{ t[7] }}</td>
+                            <td>{{ t[8] }}</td>
+                            <td>{{ t[9] }}</td>
+                            <td>
+                                {% if t[10] == 'réussie' %}
+                                <span class="badge bg-success">Réussie</span>
+                                {% elif t[10] == 'refusée' %}
+                                <span class="badge bg-danger">Refusée</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark">{{ t[10] }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if t[11] %}
+                                <span class="badge bg-danger">Oui</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Non</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Suspicions -->
+        <div class="card mb-5">
+            <div class="card-header">Transactions suspectes</div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover table-dark table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>#Susp</th>
+                            <th>#Trans</th>
+                            <th>Source</th>
+                            <th>Compte source</th>
+                            <th>Dest</th>
+                            <th>Montant</th>
+                            <th>Risque</th>
+                            <th>Raison</th>
+                            <th>Statut analyse</th>
+                            <th>Analyste</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for s in suspicions %}
+                        <tr>
+                            <td>{{ s[0] }}</td>
+                            <td>{{ s[1] }}</td>
+                            <td>{{ s[4] }} {{ s[5] }}</td>
+                            <td>{{ s[3] }}</td>
+                            <td>{{ s[7] or '—' }}</td>
+                            <td>{{ s[8] }}</td>
+                            <td><span class="badge bg-danger">{{ s[11] }}</span></td>
+                            <td>{{ s[10] }}</td>
+
+                            <td>
+                                {% if s[12] == 'en_attente' %}
+                                <span class="badge bg-warning text-dark">En attente</span>
+                                {% elif s[12] == 'validee' %}
+                                <span class="badge bg-success">Validée</span>
+                                {% else %}
+                                <span class="badge bg-danger">Refusée</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if s[15] %}
+                                {{ s[15] }} {{ s[16] }}
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if s[12] == 'en_attente' %}
+
+                                <form method="post"
+                                    action="{{ url_for('valider_suspicion', id_suspicion=s[0]) }}"
+                                    style="display:inline">
+                                    <input type="hidden" name="commentaire" value="Validée par analyste">
+                                    <button class="btn btn-sm btn-success" type="submit">Valider</button>
+                                </form>
+
+                                <form method="post"
+                                    action="{{ url_for('refuser_suspicion', id_suspicion=s[0]) }}"
+                                    style="display:inline">
+                                    <input type="hidden" name="commentaire" value="Refusée par analyste">
+                                    <button class="btn btn-sm btn-danger" type="submit">Refuser</button>
+                                </form>
+
+                                {% else %}
+                                <small class="text-muted">—</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>

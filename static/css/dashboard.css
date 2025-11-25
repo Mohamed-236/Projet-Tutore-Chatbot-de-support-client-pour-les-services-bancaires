@@ -1,0 +1,42 @@
+    
+        body {
+            background-color: #0d1117;
+            color: #cdd9e5;
+        }
+
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+        }
+
+        table {
+            color: #cdd9e5 !important;
+        }
+
+        .table thead th {
+            background-color: #21262d;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+        }
+
+        .btn-sm {
+            padding: 3px 8px;
+        }
+
+        /* Header fixe */
+        .navbar {
+            border-bottom: 1px solid #30363d;
+        }
+
+        .content {
+            padding-top: 70px; /* pour ne pas être caché par le navbar */
+        }
+
+        .user-name {
+            margin-right: 15px;
+            font-weight: 500;
+            color: #58a6ff;
+        }
+    
