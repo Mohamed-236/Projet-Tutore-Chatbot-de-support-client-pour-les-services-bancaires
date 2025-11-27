@@ -10,6 +10,10 @@
 
     <!-- CSS personnalisé -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/connexion.css') }}">
+
+     <!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 <body class="bg-light">
 
@@ -75,12 +79,29 @@
         </div>
     </div>
 
-    <!-- Footer identique à l'accueil -->
-    <footer class="custom-footer text-center py-3">
-        &copy; 2025 Yakfis-Bot. Tous droits réservés.
-    </footer>
+    
+<!-- Section Réseaux Sociaux -->
+<section class="social-section text-center py-4 bg-dark text-light">
+    <h5 class="mb-3">Suivez-nous sur les réseaux sociaux</h5>
+    <a href="https://www.facebook.com/votrepage" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-facebook"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/votreprofil" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-linkedin"></i>
+    </a>
+    <a href="https://x.com/votreprofil" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-x-lg"></i>
+    </a>
+</section>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Footer -->
+<footer class="custom-footer text-center py-3 bg-dark text-light">
+    &copy; 2025 Yakfis-Bot. Tous droits réservés.
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>

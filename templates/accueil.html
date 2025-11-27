@@ -10,6 +10,10 @@
 
     <!-- CSS personnalisé -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/acceuil.css') }}">
+
+    <!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 <body>
 
@@ -53,14 +57,28 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="mb-4">Pourquoi utiliser Yakfis-Bot ?</h2>
                     <p>
-                        Yakfis-Bot vous aide à consulter vos soldes, effectuer vos transactions et gérer vos cartes bancaires.
-                        Tout est sécurisé et fluide. Profitez d'une interface intuitive et d'une expérience rapide.
-                    </p>
-                    <p class="text-muted">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit minima repellendus,
-                        dolore praesentium esse inventore sint? Eos deserunt excepturi numquam minima placeat
-                        eveniet accusamus! Error ducimus corporis molestiae placeat eos.
-                    </p>
+    🤖 <strong>Yakfis-Bot</strong> est votre assistant bancaire intelligent. Il vous permet de :
+    <ul>
+        <li>Consulter vos soldes et l’historique de vos transactions en temps réel.</li>
+        <li>Effectuer vos virements et paiements de façon sécurisée et rapide.</li>
+        <li>Gérer vos cartes bancaires, bloquer ou débloquer vos cartes instantanément.</li>
+        <li>Recevoir des notifications personnalisées sur vos finances et alertes de sécurité.</li>
+        <li>Signaler des fraudes potentielle lier a votre compte</li>
+        <li>Avoir une reponse automatique a des questions frequentes(FAQ)</li>
+    </ul>
+</p>
+
+<p class="text-muted">
+    Grâce à une interface intuitive et conviviale, Yakfis-Bot rend vos opérations bancaires simples et agréables. 
+    Plus besoin de naviguer entre plusieurs menus : toutes les fonctionnalités sont accessibles directement dans le chat.
+</p>
+
+<p class="text-muted">
+    La sécurité est au cœur de notre solution. Vos données sont protégées et vos transactions sont chiffrées, 
+    vous offrant une expérience bancaire fiable et sans souci.
+</p>
+
+                    
                 </div>
 
                 <!-- Carrousel d'images à droite -->
@@ -68,13 +86,25 @@
                     <div id="yakfisCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active">
-                                <img src="{{ url_for('static', filename='image/dollar.jpg') }}" class="d-block w-100" alt="Image 1">
+                                <img src="{{ url_for('static', filename='image/faqorg.avif') }}" class="d-block w-100" alt="Image 1">
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ url_for('static', filename='image/crdi.avif') }}" class="d-block w-100" alt="Image 2">
+                                <img src="{{ url_for('static', filename='image/transf.jpg') }}" class="d-block w-100" alt="Image 2">
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ url_for('static', filename='image/bank.jpg') }}" class="d-block w-100" alt="Image 3">
+                                <img src="{{ url_for('static', filename='image/monde.jpg') }}" class="d-block w-100" alt="Image 3">
+
+                            </div>
+
+                            <!--Carrousel supplementaire-->
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='image/arg.jpg') }}" class="d-block w-100" alt="Image 3">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='image/cht.jpg') }}" class="d-block w-100" alt="Image 3">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='image/bot.jpg') }}" class="d-block w-100" alt="Image 3">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#yakfisCarousel" data-bs-slide="prev">
@@ -91,12 +121,28 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="custom-footer text-center py-3">
-        &copy; 2025 Yakfis-Bot. Tous droits réservés.
-    </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Section Réseaux Sociaux -->
+<section class="social-section text-center py-4 bg-dark text-light">
+    <h5 class="mb-3">Suivez-nous sur les réseaux sociaux</h5>
+    <a href="https://www.facebook.com/votrepage" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-facebook"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/votreprofil" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-linkedin"></i>
+    </a>
+    <a href="https://x.com/votreprofil" target="_blank" class="mx-2 text-light fs-4 social-icon">
+        <i class="bi bi-x-lg"></i>
+    </a>
+</section>
+
+<!-- Footer -->
+<footer class="custom-footer text-center py-3 bg-dark text-light">
+    &copy; 2025 Yakfis-Bot. Tous droits réservés.
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

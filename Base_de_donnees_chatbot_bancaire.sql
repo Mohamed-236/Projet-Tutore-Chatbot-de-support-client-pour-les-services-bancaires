@@ -54,6 +54,7 @@ ADD COLUMN id_compte_dest INT NULL REFERENCES compte(id_compte);
 ALTER TABLE trans_client
 ALTER COLUMN date_transaction SET DEFAULT CURRENT_TIMESTAMP;
 
+
 -- 4️⃣ Table INTERACTION
 CREATE TABLE interaction (
     id_interaction SERIAL PRIMARY KEY,                  -- ID unique
@@ -112,7 +113,6 @@ CREATE TABLE carte (
     statut_carte VARCHAR(20) DEFAULT 'active', -- active, bloquee, remplacee
     date_expiration DATE
 );
-
 
 
 

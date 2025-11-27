@@ -54,3 +54,13 @@ section.bg-light {
 
 
 
+/*Resaux sociaux*/
+
+.social-section a {
+    transition: transform 0.3s, color 0.3s;
+}
+
+.social-section a:hover {
+    color: #2388ff;      /* Couleur principale de ton site */
+    transform: scale(1.2); /* Zoom léger à l'hover */
+}

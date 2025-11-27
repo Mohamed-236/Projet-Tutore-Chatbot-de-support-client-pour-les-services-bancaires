@@ -219,3 +219,41 @@ body { background-color: #0d1117; color: #cdd9e5; }
 .chat-box::-webkit-scrollbar { width: 6px; }
 .chat-box::-webkit-scrollbar-track { background: #0d1117; border-radius: 4px; }
 .chat-box::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+
+
+
+.faq-column {
+    background-color: #161b22;
+    border-left: 1px solid #30363d;
+    min-width: 180px;
+    padding: 15px;
+}
+
+.faq-column h5 {
+    color: #58a6ff;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quick-btn {
+    background-color: #21262d;
+    border: 1px solid #30363d;
+    color: #58a6ff;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.quick-btn:hover {
+    background-color: #2388ff;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(35, 136, 255, 0.6);
+}

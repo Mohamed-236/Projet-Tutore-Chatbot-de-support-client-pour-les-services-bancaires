@@ -93,6 +93,11 @@ def chatbot():
 
     user_id = session["user_id"]
     prenom = session["prenom_user"]
+     
+    historique = []
+    conversations = []
+    current_conv = None
+   
 
     try:
         conn = get_connection()
@@ -123,10 +128,13 @@ def chatbot():
             ORDER BY date_creation DESC
         """, (user_id,))
         conversations = cur.fetchall()
+        
+        current_conv = request.form.get("conv_id", type=int) or request.args.get("conv_id", type=int)
 
         # Si aucune conversation sélectionnée, prendre la dernière
         if not current_conv and conversations:
             current_conv = conversations[0][0]
+
 
         # ---------------------------
         # 3️⃣ Envoyer un message dans la conversation sélectionnée
@@ -135,15 +143,20 @@ def chatbot():
             question = request.form["message"]
             reponse = trouver_reponse(question, user_id=user_id, current_conv=current_conv)
 
+
+             # Ajouter directement au historique pour l'affichage immédiat
+            historique.append((question, None, "user"))
+            historique.append((None, reponse, "bot"))
+
             cur.execute("""
                 INSERT INTO interaction (id_user, question_user, reponse_chatbot, id_conversation)
                 VALUES (%s, %s, %s, %s)
             """, (user_id, question, reponse, current_conv))
             conn.commit()
 
-        # ---------------------------
+        # -------------------------------------------------------------------
         # 4️⃣ Charger l'historique des messages pour la conversation courante
-        # ---------------------------
+        # -------------------------------------------------------------------
         historique = []
         if current_conv:
             cur.execute("""
@@ -156,12 +169,12 @@ def chatbot():
             rows = cur.fetchall()
 
             # Construire l'historique sous forme (msg_user, msg_bot, role)
-            for q, r in rows:
+            for question, reponse in rows:
                 # Message de l'utilisateur
-                historique.append((q, None, "user"))
+                historique.append((question, None, "user"))
 
                 # Message du bot
-                historique.append((None, r, "bot"))
+                historique.append((None, reponse, "bot"))
 
     except psycopg2.Error as e:
         flash(f"Erreur base de données : {e}", "danger")
@@ -177,7 +190,6 @@ def chatbot():
         conversations=conversations,
         current_conv=current_conv
     )
-
 
 
 
@@ -238,10 +250,6 @@ def refuser_suspicion(id_suspicion):
     else:
         flash("Erreur lors de l'opération.", "danger")
     return redirect(url_for("dashboard"))
-
-
-
-
 
 
 # =========================

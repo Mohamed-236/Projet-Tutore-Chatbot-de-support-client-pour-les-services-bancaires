@@ -30,31 +30,52 @@
             </form>
         </aside>
 
-        <!-- Chat area -->
+        <!-- Chat + FAQ area -->
         <main class="col-md-9 col-lg-10 d-flex flex-column p-3 chat-area">
             <div class="d-flex justify-content-between align-items-center mb-3 chat-header">
                 <h2>🤖 Yakfis-Bot | <span class="conseiller">{{ prenom }}</span></h2>
                 <a href="{{ url_for('deconnexion') }}" class="btn logout-btn"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
             </div>
 
-            <div class="chat-box flex-grow-1 d-flex flex-column gap-3" id="chat-box">
-                {% for msg in historique %}
-                    {% if msg[2] == 'user' %}
-                        <div class="message user-message rounded">
-                            <strong>👨🏿‍🦰 </strong> {{ msg[0] }}
-                        </div>
-                    {% else %}
-                        <div class="message bot-message rounded">
-                            <strong>🤖 </strong> {{ msg[1] }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+            <!-- Chat central + colonne FAQ -->
+            <div class="d-flex gap-3 flex-grow-1">
+                <!-- Chat box -->
+                <div class="chat-box flex-grow-1 d-flex flex-column gap-3" id="chat-box">
+                    {% for msg in historique %}
+                        {% if msg[2] == 'user' %}
+                            <div class="message user-message rounded">
+                                <strong>👨🏿‍🦰 </strong> {{ msg[0] }}
+                            </div>
+                        {% else %}
+                            <div class="message bot-message rounded">
+                                <strong>🤖 </strong> {{ msg[1] }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Colonne FAQ -->
+                <div class="faq-column d-flex flex-column">
+                    <h5 class="text-center mb-3">💡FAQ </h5>
+                    <div class="quick-actions d-flex flex-column gap-2">
+                        <button class="btn quick-btn" onclick="sendQuick('solde')">💰 Solde</button>
+                        <button class="btn quick-btn" onclick="sendQuick('historique de mes transactions')">📑 Transactions</button>
+                        <button class="btn quick-btn" onclick="sendQuick('statut de ma carte')">💳 Ma carte</button>
+                        <button class="btn quick-btn" onclick="sendQuick('ouvrir un compte')">🏦 Ouvrir compte</button>
+                        <button class="btn quick-btn" onclick="sendQuick('fermer mon compte')">❌ Fermer compte</button>
+                        <button class="btn quick-btn" onclick="sendQuick('bloquer ma carte perdue')">🚫 Carte perdue</button>
+                        <button class="btn quick-btn" onclick="sendQuick('contacter un conseiller')">📞 Contact</button>
+                    </div>
+                </div>
             </div>
 
+            <!-- Formulaire d'envoi -->
             <form method="POST" class="d-flex justify-content-center gap-2 chat-input mt-3">
+                <input type="hidden" name="conv_id" value="{{ current_conv }}">
                 <input type="text" name="message" class="form-control" placeholder="Comment puis-je vous aider ?..." required>
                 <button type="submit" class="btn"><i class="bi bi-send-fill"></i> Envoyer</button>
-            </form>
+           </form>
+
         </main>
     </div>
 </div>
@@ -64,5 +85,14 @@
     const chatBox = document.getElementById('chat-box');
     chatBox.scrollTop = chatBox.scrollHeight;
 </script>
+
+<script>
+function sendQuick(text) {
+    const input = document.querySelector("input[name='message']");
+    input.value = text;
+    input.form.submit();
+}
+</script>
+
 </body>
 </html>

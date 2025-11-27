@@ -29,7 +29,7 @@ def get_comptes_user(user_id):
     conn.close()
     return comptes
 
-
+'''
 def get_transactions_compte(id_compte, limit=10):
     """Récupère les dernières transactions d'un compte"""
     conn = get_connection()
@@ -44,13 +44,14 @@ def get_transactions_compte(id_compte, limit=10):
     transactions = cur.fetchall()
     cur.close()
     conn.close()
-    return 
-
+    return  transactions
+'''
 
 
 # =============================
 # Récupérer les comptes du user
 # =============================
+'''
 def get_comptes_user(id_user):
     conn = get_connection()
     cur = conn.cursor()
@@ -62,7 +63,7 @@ def get_comptes_user(id_user):
     comptes = cur.fetchall()
     conn.close()
     return comptes
-
+'''
 # =============================
 # Récupérer transactions d’un compte
 # =============================
@@ -78,6 +79,7 @@ def get_transactions_compte(id_compte, limit=5):
     """, (id_compte, limit))
 
     trans = cur.fetchall()
+    cur.close()
     conn.close()
     return trans
 
@@ -95,6 +97,7 @@ def get_cartes_user(id_user):
         WHERE co.id_user = %s
     """, (id_user,))
     cartes = cur.fetchall()
+    cur.close
     conn.close()
     return cartes
 
@@ -113,6 +116,7 @@ def bloquer_carte(id_carte):
         WHERE id_carte = %s
     """, (id_carte,))
     conn.commit()
+    cur.close()
     conn.close()
 
 # =============================
@@ -127,6 +131,7 @@ def remplacer_carte(id_carte):
         WHERE id_carte = %s
     """, (id_carte,))
     conn.commit()
+    cur.close()
     conn.close()
 
 
@@ -146,6 +151,7 @@ def get_compte_by_numero(numero_compte):
         WHERE numero_compte = %s
     """, (numero_compte,))
     compte = cur.fetchone()
+    cur.close()
     conn.close()
     return compte
 
@@ -180,7 +186,7 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
         solde_source = result[0]
 
         # Vérifier limite maximale par transaction
-        if montant > 1000000:
+        if montant > 5000000:
             # Transaction refusée -> suspicion
             cur.execute("""
                 INSERT INTO trans_client(id_compte, id_compte_dest, montant_transaction, type_transaction, statut_transaction)
@@ -192,14 +198,14 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
             cur.execute("""
                 INSERT INTO suspicion(id_transaction, raison_suspicion, niveau_risque)
                 VALUES (%s, %s, %s)
-            """, (id_trans, "Montant supérieur à 1 million", "élevé"))
+            """, (id_trans, "Montant supérieur à 5 million", "élevé"))
 
             conn.commit()
-            return False, "❌Transaction annulee,Le montant maximum autorisé par transaction est 1 000 000 FCFA."
+            return False, "❌Votre transaction est en cours de verification.Si elle respecte les conditions elle sera valider par a analyste, sinon elle sera rejettee.Vous seriez notifier dans le plus bref delai...Avez-vous d'autre questions?"
 
         # Vérifier solde insuffisant
         if solde_source < montant:
-            return False, f"❌Solde insuffisant ({solde_source} FCFA). Veuillez saisir un montant inférieur ou égal à votre solde."
+            return False, f"❌Transaction suspecte, Merci de patienter pendant que nos analyste verifie les conditions de votre transaction.Vous seriez notifier le plus vite possible. Avez-vous d'autre question a me posee?"
 
         # Débiter compte source
         cur.execute("""
@@ -229,6 +235,7 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
         print("Erreur transaction :", e)
         return False, "Une erreur est survenue lors de la transaction."
     finally:
+        cur.close()
         conn.close()
 
 
