@@ -15,6 +15,14 @@ app = Flask(__name__)
 #Cle secrete pour la gestion des session
 app.secret_key = "74524cba05887d3720a5bc2fb828a3d86c58316cb492bc08891e3983796e8e80"
 
+
+@app.template_filter('nl2br')
+def nl2br(value):
+    return value.replace("\n", "<br>")
+
+
+
+
 # =========================
 #  Page d'accueil
 # =========================
@@ -97,6 +105,7 @@ def chatbot():
     historique = []
     conversations = []
     current_conv = None
+    rows = []
    
 
     try:
@@ -154,27 +163,31 @@ def chatbot():
             """, (user_id, question, reponse, current_conv))
             conn.commit()
 
-        # -------------------------------------------------------------------
-        # 4️⃣ Charger l'historique des messages pour la conversation courante
-        # -------------------------------------------------------------------
+        #Charger toutes l'historique
         historique = []
         if current_conv:
             cur.execute("""
-                SELECT question_user, reponse_chatbot
-                FROM interaction
-                WHERE id_user=%s AND id_conversation=%s
-                ORDER BY date_interaction ASC
-            """, (user_id, current_conv))
-
+                  SELECT question_user, reponse_chatbot
+                  FROM interaction
+                  WHERE id_user=%s AND id_conversation=%s
+                  ORDER BY date_interaction ASC
+            """,(user_id, current_conv))
             rows = cur.fetchall()
 
+        # -------------------------------------------------------------------
+        # 4️⃣ Charger l'historique des messages pour la conversation courante
+        # -------------------------------------------------------------------
+        
+        
+        
             # Construire l'historique sous forme (msg_user, msg_bot, role)
-            for question, reponse in rows:
+        for question, reponse in rows:
                 # Message de l'utilisateur
                 historique.append((question, None, "user"))
 
                 # Message du bot
                 historique.append((None, reponse, "bot"))
+        
 
     except psycopg2.Error as e:
         flash(f"Erreur base de données : {e}", "danger")
@@ -193,9 +206,9 @@ def chatbot():
 
 
 
-#Route pour le dashbord
 
-# helper : protéger l'accès aux analystes (conseillers)
+
+#  protéger l'accès aux analystes (conseillers)
 def login_required_analyste(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -209,7 +222,7 @@ def login_required_analyste(f):
         return f(*args, **kwargs)
     return decorated
 
-
+#Route pour le dashbord
 @app.route("/dashboard")
 @login_required_analyste
 def dashboard():

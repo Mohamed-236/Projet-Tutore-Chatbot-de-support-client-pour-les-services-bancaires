@@ -31,7 +31,7 @@
         }
 
         .content {
-            padding-top: 70px; /* pour ne pas être caché par le navbar */
+            padding-top: 70px; 
         }
 
         .user-name {

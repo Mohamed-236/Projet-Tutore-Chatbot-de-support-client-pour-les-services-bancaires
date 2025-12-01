@@ -4,7 +4,7 @@
 
 /* Navbar */
 .custom-navbar {
-    background-color: #0d1014;  /* CHANGE cette couleur à volonté */
+    background-color: #0d1014;  
 }
 
 .custom-navbar .navbar-brand,
@@ -43,7 +43,7 @@
 
 /* Footer */
 .custom-footer {
-    background-color: #0d1014; /* CHANGE cette couleur à volonté */
+    background-color: #0d1014; 
     color: white; /* couleur du texte */
 }
 
@@ -61,6 +61,6 @@ section.bg-light {
 }
 
 .social-section a:hover {
-    color: #2388ff;      /* Couleur principale de ton site */
+    color: #2388ff;      /* Couleur principale */
     transform: scale(1.2); /* Zoom léger à l'hover */
 }

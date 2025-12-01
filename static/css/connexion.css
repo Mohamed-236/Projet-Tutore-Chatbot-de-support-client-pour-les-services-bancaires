@@ -9,7 +9,7 @@
    Navbar
 ------------------------- */
 .custom-navbar {
-    background-color: #1e1e2f; /* Couleur modifiable */
+    background-color: #1e1e2f; 
 }
 
 /* Liens de la navbar */
@@ -24,7 +24,7 @@
    Footer
 ------------------------- */
 .custom-footer {
-    background-color: #1e1e2f; /* Couleur modifiable */
+    background-color: #1e1e2f; 
     color: #ffffff; /* Couleur texte */
 }
 
@@ -34,23 +34,23 @@
 .card-form {
     max-width: 400px;
     width: 100%;
-    background-color: #ffffff; /* Couleur modifiable */
+    background-color: #ffffff; 
 }
 
-/* Bouton personnalisé */
+/* Bouton*/
 .btn-custom {
-    background-color: #0d6efd; /* Couleur modifiable */
+    background-color: #0d6efd; 
     color: #ffffff;
     border: none;
 }
 
 .btn-custom:hover {
-    background-color: #0b5ed7; /* Couleur hover modifiable */
+    background-color: #0b5ed7; 
 }
 
 /* Lien retour */
 .link-custom {
-    color: #0d6efd; /* Couleur modifiable */
+    color: #0d6efd; 
 }
 .link-custom:hover {
     color: #0b5ed7;
@@ -59,7 +59,7 @@
 
 /* Bouton personnalisé */
 .btn-custom {
-    background-color: #0d1014; /* Couleur normale du bouton */
+    background-color: #0d1014; /* Couleur du bouton */
     color: #ffffff; /* Couleur du texte */
     border: none;
 }

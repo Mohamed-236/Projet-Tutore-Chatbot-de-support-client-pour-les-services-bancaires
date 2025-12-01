@@ -81,10 +81,6 @@ CREATE TABLE conversation (
 
 
 
-
-
-
-
 -- 5️⃣ Table SUSPICION
 CREATE TABLE suspicion (
     id_suspicion SERIAL PRIMARY KEY,                     -- ID unique
@@ -102,6 +98,8 @@ CREATE TABLE faq (
     question_faq VARCHAR(255) NOT NULL,                  -- Question fréquente
     reponse_faq TEXT NOT NULL                             -- Réponse, texte long
 );
+
+
 
 
 -- 7  Table carte BANCAIRE
@@ -163,6 +161,57 @@ VALUES
 
 --Insertion des donnees dans faq
 
+TRUNCATE TABLE faq RESTART IDENTITY;
+
+
+--DONNEES FICTIVES POUR LA TABLE COMPTES
+
+INSERT INTO carte (id_compte, numero_carte, type_carte, date_expiration, statut_carte)
+VALUES
+(1, '5312 8945 1203 4478', 'Mastercard', '2027-05-01', 'active'),
+(2, '4539 2201 9987 1123', 'Visa',       '2026-09-01', 'active'),
+(3, '5487 3345 9988 2210', 'Mastercard', '2027-03-01', 'active'),
+(4, '4716 8890 3344 5522', 'Visa',       '2028-01-01', 'active'),
+(5, '5204 7712 6654 9931', 'Mastercard', '2026-12-01', 'active'),
+(6, '4023 5678 9033 1122', 'Visa',       '2027-11-01', 'active'),
+(7, '5356 9981 0022 5544', 'Mastercard', '2027-06-01', 'active'),
+(8, '4532 1177 8899 0044', 'Visa',       '2026-04-01', 'active'),
+(9, '5310 6654 7721 9900', 'Mastercard', '2028-02-01', 'active'),
+(10,'4718 3344 5566 7788', 'Visa',       '2027-09-01', 'active');
+
+
+SELECT * FROM compte
+
+
+
+
+
+--Modifiaction supplementaire
+
+-- 1) ajouter id_analyste (FK vers utilisateur)
+ALTER TABLE suspicion
+ADD COLUMN id_analyste INT NULL REFERENCES utilisateur(id_user);
+
+-- 2) remplacer le champ texte analyste_humain si présent
+-- (si tu as déjà analyste_humain, on le retire)
+ALTER TABLE suspicion
+DROP COLUMN IF EXISTS analyste_humain;
+
+-- 3) ajouter statut_analyse et commentaire
+ALTER TABLE suspicion
+ADD COLUMN statut_analyse VARCHAR(50) DEFAULT 'en_attente';
+
+ALTER TABLE suspicion
+ADD COLUMN commentaire TEXT;
+
+-- 4) index pour recherche rapide
+CREATE INDEX IF NOT EXISTS idx_suspicion_date ON suspicion(date_suspicion DESC);
+
+
+
+
+
+
 INSERT INTO faq (question_faq, reponse_faq) VALUES
 ('Comment ouvrir un compte bancaire ?', 'Vous pouvez ouvrir un compte en ligne ou en agence en présentant une pièce d’identité, un justificatif de domicile et une photo d’identité.'),
 ('Quels sont les types de comptes disponibles ?', 'Nous proposons des comptes courants, des comptes épargne et des comptes professionnels.'),
@@ -220,7 +269,7 @@ INSERT INTO faq (question_faq, reponse_faq) VALUES
 ('Quelles sont vos heures d’ouverture ?', 'Nos agences sont ouvertes du lundi au vendredi, de 8h à 17h.');
 
 INSERT INTO faq (question_faq, reponse_faq) VALUES
-('Merci merci Thank you ravi plaisir' , 'Je vous en prie, plaisir partager');
+('Merci, merci, Thank you .ravi, plaisir' , 'Je vous en prie, plaisir partager');
 INSERT INTO faq (question_faq, reponse_faq) VALUES
 ('Quelle est l''heure d''ouverture?' , 'Nous ouvrons a partir de 8h et travaillons du lundi au samedi')
 
@@ -301,45 +350,165 @@ INSERT INTO faq (question_faq, reponse_faq) VALUES
 
 
 
---DONNEES FICTIVES POUR LA TABLE COMPTES
-
-INSERT INTO carte (id_compte, numero_carte, type_carte, date_expiration, statut_carte)
-VALUES
-(1, '5312 8945 1203 4478', 'Mastercard', '2027-05-01', 'active'),
-(2, '4539 2201 9987 1123', 'Visa',       '2026-09-01', 'active'),
-(3, '5487 3345 9988 2210', 'Mastercard', '2027-03-01', 'active'),
-(4, '4716 8890 3344 5522', 'Visa',       '2028-01-01', 'active'),
-(5, '5204 7712 6654 9931', 'Mastercard', '2026-12-01', 'active'),
-(6, '4023 5678 9033 1122', 'Visa',       '2027-11-01', 'active'),
-(7, '5356 9981 0022 5544', 'Mastercard', '2027-06-01', 'active'),
-(8, '4532 1177 8899 0044', 'Visa',       '2026-04-01', 'active'),
-(9, '5310 6654 7721 9900', 'Mastercard', '2028-02-01', 'active'),
-(10,'4718 3344 5566 7788', 'Visa',       '2027-09-01', 'active');
-
-
-SELECT * FROM compte
 
 
 
 
+-- ============================================
+-- FAQ Banque – Version améliorée avec emojis
+-- ============================================
 
---Modifiaction supplementaire
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Comment ouvrir un compte bancaire ?', '📝 Ouvrir un compte est facile ! Vous pouvez le faire en agence ou en ligne avec votre pièce d’identité, justificatif de domicile et une photo récente. 🚀'),
+('Quels sont les types de comptes disponibles ?', '💳 Nous proposons : comptes courants pour vos dépenses, comptes épargne pour faire fructifier votre argent et comptes professionnels pour votre activité.'),
+('Quels documents sont nécessaires pour ouvrir un compte ?', '📄 Pièce d’identité, justificatif de domicile et photo récente 🖼️. Facile à préparer !'),
+('Combien de temps faut-il pour activer un compte ?', '⏳ Activation rapide : 24 à 48 heures après vérification. Vous serez notifié ! ✅'),
+('Comment consulter le solde de mon compte ?', '💰 Via l’application mobile 📱, le site web 🌐 ou un distributeur automatique 🏧.'),
 
--- 1) ajouter id_analyste (FK vers utilisateur)
-ALTER TABLE suspicion
-ADD COLUMN id_analyste INT NULL REFERENCES utilisateur(id_user);
+('Comment fermer mon compte bancaire ?', '📪 Envoyez une demande écrite en agence ou depuis votre espace client. N’oubliez pas de transférer vos fonds ! 💸'),
+('Y a-t-il des frais mensuels sur mon compte ?', '💵 Certains comptes ont des frais. Consultez votre contrat ou espace client pour les détails.'),
+('Puis-je avoir plusieurs comptes ?', '✅ Oui, vous pouvez ouvrir plusieurs comptes selon vos besoins personnels ou professionnels.'),
+('Puis-je ouvrir un compte sans revenu régulier ?', '💡 Certains comptes ne nécessitent pas de revenu fixe. Contactez le support pour en savoir plus !'),
+('Comment modifier mes informations personnelles ?', '✏️ Mettez à jour vos informations depuis votre espace client ou en agence avec vos justificatifs.') ,
 
--- 2) remplacer le champ texte analyste_humain si présent
--- (si tu as déjà analyste_humain, on le retire)
-ALTER TABLE suspicion
-DROP COLUMN IF EXISTS analyste_humain;
+('Comment obtenir une carte bancaire ?', '💳 Demandez-la à l’ouverture du compte ou plus tard depuis votre espace client. Sécurisé et rapide ! 🔒'),
+('En combien de temps je reçois ma carte ?', '📦 Livraison sous 7 à 10 jours ouvrables. Patience… elle vaut le coup ! 😄'),
+('Que faire en cas de carte perdue ou volée ?', '🚨 Bloquez-la immédiatement via l’application ou contactez le service client pour éviter toute fraude.'),
+('Comment changer le code PIN de ma carte ?', '🔑 Changez votre PIN à un guichet automatique ou depuis votre espace client.'),
+('Ma carte est expirée, que faire ?', '🆕 Une nouvelle carte est envoyée automatiquement avant l’expiration. Vérifiez votre boîte aux lettres ou espace client.'),
 
--- 3) ajouter statut_analyse et commentaire
-ALTER TABLE suspicion
-ADD COLUMN statut_analyse VARCHAR(50) DEFAULT 'en_attente';
+('Puis-je utiliser ma carte à l’étranger ?', '🌍 Oui, activez-la pour paiements internationaux et vérifiez vos plafonds.'),
+('Quels sont les frais à l’étranger ?', '💸 Des frais peuvent s’appliquer selon la zone. Consultez notre grille tarifaire.'),
+('Comment activer ma carte bancaire ?', '✅ Activez-la avec un retrait ou paiement PIN. Prêt à l’emploi !'),
+('Comment augmenter le plafond de ma carte ?', '📈 Demandez une augmentation temporaire ou permanente depuis votre espace client.'),
+('Que faire si ma carte est bloquée ?', '🛑 Contactez le service client pour la débloquer ou demander une nouvelle carte.'),
 
-ALTER TABLE suspicion
-ADD COLUMN commentaire TEXT;
+('Comment effectuer un virement bancaire ?', '💸 Connectez-vous à votre espace client, sélectionnez “Effectuer un virement” et suivez les étapes. 🚀'),
+('Y a-t-il des frais pour les virements ?', '✅ Virements internes gratuits, internationaux peuvent avoir des frais.'),
+('Combien de temps prend un virement ?', '⏱️ National : 24-48h, international : jusqu’à 5 jours ouvrables.'),
+('Puis-je programmer un virement automatique ?', '📅 Oui, planifiez vos virements récurrents depuis votre espace client. Plus d’oublis !'),
+('Comment annuler un virement ?', '❌ Tant qu’il n’est pas exécuté, annulez-le depuis l’historique.'),
+('Comment recevoir un paiement international ?', '🌐 Fournissez votre IBAN et code SWIFT/BIC à l’expéditeur.'),
+('Qu’est-ce que l’IBAN ?', 'ℹ️ Identifiant international unique pour votre compte, indispensable pour les virements.'),
+('Où trouver mon IBAN ?', '📃 Sur votre relevé, dans l’application ou espace client.'),
+('Puis-je effectuer un virement sans IBAN ?', '❌ Non, l’IBAN est obligatoire pour identifier le bénéficiaire.'),
+('Comment vérifier si un virement est bien arrivé ?', '✔️ Consultez l’historique de transactions dans votre espace client.'),
 
--- 4) index pour recherche rapide
-CREATE INDEX IF NOT EXISTS idx_suspicion_date ON suspicion(date_suspicion DESC);
+('Comment faire une demande de prêt ?', '🏦 Demandez en ligne ou en agence. Un conseiller vous guidera.'),
+('Quels types de prêts proposez-vous ?', '💰 Prêts personnels, immobiliers, auto et crédits à la consommation.'),
+('Combien de temps faut-il pour obtenir un prêt ?', '⏳ Réponse en 48-72h après étude du dossier.'),
+('Quelles sont les conditions pour un prêt personnel ?', '📋 Revenu stable et capacité de remboursement. Facile à vérifier.'),
+('Puis-je rembourser mon prêt par anticipation ?', '💡 Oui, possible. Des frais peuvent s’appliquer selon le contrat.'),
+('Comment connaître le taux d’intérêt actuel ?', '📊 Consultez le site web ou contactez un conseiller pour le taux exact.'),
+('Puis-je regrouper plusieurs prêts ?', '🔗 Oui, solutions de regroupement disponibles pour simplifier vos remboursements.'),
+('Comment suivre mes remboursements ?', '📅 Tableau d’amortissement disponible dans l’espace client.'),
+('Puis-je demander un prêt sans compte chez vous ?', '❌ Non, un compte bancaire est requis.'),
+('Quels documents sont nécessaires pour un prêt ?', '📝 Pièce d’identité, justificatif de revenus et domicile.') ,
+
+('Comment sécuriser mon compte bancaire ?', '🔒 Activez la double authentification, changez vos mots de passe régulièrement et ne partagez jamais vos identifiants.'),
+('Que faire en cas de suspicion de fraude ?', '🚨 Contactez immédiatement notre service antifraude.'),
+('Qu’est-ce que la double authentification ?', '✅ Couche de sécurité supplémentaire pour protéger vos connexions et transactions.'),
+('Comment changer mon mot de passe ?', '🔑 Allez dans “Sécurité du compte” pour le modifier facilement.'),
+('Que faire si j’ai oublié mon mot de passe ?', '🔄 Utilisez “Mot de passe oublié” pour le réinitialiser.'),
+('Est-ce que mes informations sont protégées ?', '🛡️ Oui, toutes vos données sont chiffrées et sécurisées.'),
+('Que faire si je reçois un mail suspect ?', '⚠️ Ne cliquez sur aucun lien et signalez-le au service sécurité.'),
+('Puis-je accéder à mon compte depuis plusieurs appareils ?', '📱💻 Oui, mais utilisez uniquement des appareils sécurisés.'),
+('Comment contacter le service client ?', '📞 Par téléphone, mail ou chat en ligne, nous sommes là pour vous aider !'),
+('Quelles sont vos heures d’ouverture ?', '⏰ Du lundi au vendredi, 8h-17h. Support en ligne disponible le week-end !');
+
+
+--Supplementaire
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Comment contacter un conseiller ?', '📞 Depuis l’application ou en appelant le service client. Vous pouvez aussi demander un rendez-vous en agence 🏦.'),
+('Puis-je discuter avec un agent humain ?', '👨‍💼 Bien sûr ! Demandez “Contacter un agent” et nous vous redirigeons vers un conseiller disponible.'),
+('Comment signaler une fraude ?', '🚨 Connectez-vous à votre espace client et signalez immédiatement toute opération suspecte ou appelez le service antifraude.'),
+('J’ai reçu un SMS ou email suspect de la banque, que faire ?', '⚠️ Ne cliquez sur aucun lien et transférez le message à notre cellule de sécurité. Nous vérifions rapidement !🔒'),
+('Comment protéger ma carte sur Internet ?', '🛡️ Activez 3D Secure et ne partagez jamais vos informations bancaires sur des sites non sécurisés (🔒 dans la barre).'),
+('Comment savoir si un site est sécurisé ?', '🔍 Le site doit afficher un cadenas 🔒 et commencer par https://. Sinon, danger ⚠️');
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Comment installer l’application mobile ?', '📲 Dans Play Store ou App Store. Recherchez notre banque et cliquez sur Installer ✔️'),
+('Je n’arrive pas à me connecter à mon espace client, que faire ?', '🔄 Vérifiez vos identifiants puis réinitialisez votre mot de passe si nécessaire.'),
+('Puis-je recevoir des alertes de transactions ?', '🔔 Oui ! Activez les notifications dans l’application mobile.'),
+('Est-il possible de désactiver temporairement ma carte ?', '🛑 Oui, vous pouvez verrouiller/déverrouiller votre carte en un clic depuis l’application. Hyper pratique ! 🔐');
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Comment commander un chéquier ?', '📬 Commandez en ligne ou en agence. Livraison à domicile ou retrait en agence ✔️'),
+('Comment obtenir un relevé de compte ?', '📄 Téléchargez-le depuis votre espace client ou demandez un envoi mensuel.'),
+('Y a-t-il des frais pour le relevé papier ?', '📦 Oui, des frais peuvent s’appliquer selon votre offre bancaire.');
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Pourquoi mon paiement a été refusé ?', '⛔ Vérifiez votre solde, plafond de carte ou la méthode d’authentification.'),
+('Pourquoi mon compte est-il bloqué ?', '🚫 Peut être dû à une sécurité renforcée ou incident de paiement. Contactez un conseiller pour le débloquer.'),
+('Mon retrait a échoué mais l’argent a été débité, que faire ?', '⚠️ Pas d’inquiétude ! Le montant est généralement recrédité sous 24-48h. Sinon contactez-nous.');
+
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Comment obtenir un découvert autorisé ?', '📊 Disponible selon vos revenus et historique bancaire. Demandez via application ou en agence.'),
+('Quels sont les frais de découvert ?', '💸 Les intérêts varient selon votre situation. Consultez votre contrat ou service client.');
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Puis-je ouvrir un compte en étant étudiant ?', '🎓 Oui bien sûr ! Des offres avantageuses sont disponibles pour les jeunes.'),
+('Quel âge pour ouvrir un compte ?', '👶 Avec un tuteur dès 12 ans. Autonome à partir de 18 ans.');
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Proposez-vous des assurances ?', '🛡 Oui : moyens de paiement, habitation, auto, etc. Demandez selon vos besoins !');
+
+
+
+INSERT INTO faq (question_faq, reponse_faq) VALUES
+('Bonjour', '👋 Bonjour et bienvenue. je suis Yakfis-Bot, Votre assistant bancaire sympa😊! Comment puis-je vous aider aujourd’hui ? 😊'),
+('Salut', 'Hey 👋 Comment puis-je vous assister ?'),
+('Bonsoir', '✨ Bonsoir ! Besoin d’aide sur un service bancaire ?'),
+('Hello', 'Hello 👋 I can help you with banking services if you want! 😊'),
+
+('Qui es-tu ?', '🤖 Je suis votre assistant bancaire virtuel, toujours là pour vous aider 💪'),
+('Qui t’a créé ?', '👨‍💻 Je suis créé par le grand informaticien,le pere vénéré Yakfis-FBi 💪 ! 😊'),
+('Es-tu humain ?', '😄 Pas encore ! Je suis un chatbot, mais je fais de mon mieux pour être sympa 🤗'),
+('Tu fais quoi ?', '🧠 Je réponds à vos questions et vous aide dans vos démarches bancaires 📌'),
+
+('Merci', '🙏 Avec plaisir ! N’hésitez pas si vous avez d’autres questions 😊'),
+('Merci beaucoup', '🥰 Je suis là pour ça ! D’autres besoins ?'),
+('Ok merci', '👍 Parfait ! N’hésitez pas si besoin 😉'),
+
+('Au revoir', '👋 À bientôt ! Prenez soin de vous 🏦'),
+('Bye', 'Bye bye 👋 Revenez quand vous voulez !'),
+('Bonne journée', '🌞 Merci ! À vous aussi une excellente journée !'),
+('Bonne soirée', '🌙 Merci ! Passez une belle soirée ✨'),
+
+('Raconte une blague', '😄 Pourquoi les banquiers ne jouent-ils jamais à cache-cache ? Parce que l’argent se retrouve toujours 🏦💸😂'),
+('Tu es drôle', '😎 J’essaie toujours d’ajouter un peu de fun dans vos finances !'),
+('Tu es nul', '😢 Oh… je vais m’améliorer. Dites-moi comment je peux mieux vous aider ❤️'),
+
+('Je t’aime', '🥹 Aww merci ! Mais je préfère garder une relation… bancaire 💳❤️'),
+('Tu dors ?', '😴 Jamais ! Je suis disponible 24h/24 pour vous aider 🚀');
+
+
+
+
+TRUNCATE TABLE faq RESTART IDENTITY;
+
+--pg_trgm = trigrammes
+--👉 Cela permet de faire des recherches approximate matching = tolère les fautes d’orthographe, mots partiels
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+Crée un index pour accélérer les recherches
+CREATE INDEX faq_question_trgm_idx
+ON faq
+USING gin (question_faq gin_trgm_ops);
+
+
+SELECT question_faq, reponse_faq
+FROM faq
+WHERE question_faq % 'ouvrir un compte'
+ORDER BY similarity(question_faq, 'ouvrir un compte') DESC
+LIMIT 5;
+

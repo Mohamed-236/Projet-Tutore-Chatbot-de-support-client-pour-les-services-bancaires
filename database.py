@@ -1,4 +1,6 @@
 import psycopg2
+from psycopg2.extras import RealDictCursor
+
 
 def get_connection():
     return psycopg2.connect(
@@ -157,7 +159,7 @@ def get_compte_by_numero(numero_compte):
 
 
 
-
+#Fonction pour la gestion des transaction dans la bd
 def effectuer_transaction(id_compte_source, id_compte_dest, montant):
     conn = get_connection()
     cur = conn.cursor()
@@ -201,6 +203,7 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
             """, (id_trans, "Montant supérieur à 5 million", "élevé"))
 
             conn.commit()
+
             return False, "❌Votre transaction est en cours de verification.Si elle respecte les conditions elle sera valider par a analyste, sinon elle sera rejettee.Vous seriez notifier dans le plus bref delai...Avez-vous d'autre questions?"
 
         # Vérifier solde insuffisant
@@ -242,11 +245,7 @@ def effectuer_transaction(id_compte_source, id_compte_dest, montant):
 
 
 
-
-
-
 #Ajout des fonction relative au dashboard
-
 def get_transactions_for_dashboard(limit=200):
     conn = get_connection()
     cur = conn.cursor()
@@ -327,3 +326,6 @@ def set_suspicion_decision(id_suspicion, id_analyste, statut, commentaire=None):
     cur.close()
     conn.close()
     return bool(res)
+
+
+
