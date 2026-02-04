@@ -10,10 +10,11 @@ from functools import wraps
 
 
 
-#Creaton de lapp
+#Creation de lapp
 app = Flask(__name__)
 #Cle secrete pour la gestion des session
 app.secret_key = "74524cba05887d3720a5bc2fb828a3d86c58316cb492bc08891e3983796e8e80"
+
 
 
 @app.template_filter('nl2br')
